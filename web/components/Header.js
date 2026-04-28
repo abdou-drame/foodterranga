@@ -9,6 +9,10 @@ export default function Header() {
         </Link>
         <nav className="header-nav">
           <Link href="/">Restaurants</Link>
+          {/* Nouveau lien vers la page de suivi */}
+          <Link href="/mes-commandes">
+            Mes commandes
+          </Link>
         </nav>
       </div>
     </header>
