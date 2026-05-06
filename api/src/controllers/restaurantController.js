@@ -1,4 +1,4 @@
-const Restaurant = require('../models/Restaurant');
+const Restaurant = require('../models/restaurant'); // Bien vérifier le 'r' minuscule ici
 
 // GET /api/restaurants — Récupérer tous les restaurants
 exports.getAll = async (req, res, next) => {
