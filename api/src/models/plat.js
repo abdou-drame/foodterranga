@@ -43,3 +43,4 @@ const platSchema = new mongoose.Schema(
 );
 
 module.exports = mongoose.model('Plat', platSchema);
+// Mise à jour déploiement : 06 Mai 2026
