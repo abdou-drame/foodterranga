@@ -1,7 +1,17 @@
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+const path = require('path');
+const fs = require('fs');
+
+// Charger .env seulement en développement local
+// En Docker, les variables sont injectées par docker-compose via 'environment'
+const envPath = path.resolve(__dirname, '../../../env');
+if (fs.existsSync(envPath)) {
+  dotenv.config({ path: envPath });
+}
+
 const Restaurant = require('../models/Restaurant');
 const Plat = require('../models/Plat');
-
 
 const restaurants = [
   {
@@ -84,8 +94,9 @@ const platsParRestaurant = {
 
 async function seed() {
   try {
-    console.log('⏳ Connexion à MongoDB Atlas...');
-    await mongoose.connect(MONGODB_URI);
+    console.log('⏳ Connexion à MongoDB...');
+    // Utilisation de process.env.MONGODB_URI (défini dans .env ou injecté par Docker)
+    await mongoose.connect(process.env.MONGODB_URI);
     console.log('✅ Connecté à MongoDB');
 
     // 1. Nettoyer les collections
