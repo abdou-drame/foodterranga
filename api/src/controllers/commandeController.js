@@ -1,4 +1,4 @@
-const Commande = require('../models/Commande');
+const Commande = require('../models/commande');
 
 // Transitions de statut autorisées
 const transitionsAutorisees = {

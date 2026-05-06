@@ -4,33 +4,38 @@
  * Ce fichier configure l'application Express, établit la connexion à MongoDB Atlas,
  * définit les middlewares globaux (CORS, JSON, Error Handling) et centralise
  * les routes de l'API (Restaurants et Plats).
- * * @author Abdou Drame (DB )
- * @version 1.0.0
+ * @author Abdou Drame (DB)
+ * @version 1.0.1
  */
 
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const morgan = require('morgan');
-const dotenv = require('dotenv');
-require('dotenv').config();
+const path = require('path');
+const fs = require('fs');
+
+// --- Configuration de l'environnement ---
+// Correction : On utilise ".env" avec le point. 
+// __dirname est dans api/src, donc "../../.env" remonte à la racine du projet.
+const envPath = path.resolve(__dirname, '../../.env');
+
+if (fs.existsSync(envPath)) {
+    require('dotenv').config({ path: envPath });
+    console.log("✅ Mode Local : Fichier .env détecté et chargé.");
+} else {
+    // En Docker, les variables sont injectées directement, donc pas besoin de fichier .env
+    console.log("ℹ️ Mode Docker/Système : Utilisation des variables d'environnement injectées.");
+}
 
 const restaurantRoutes = require('./routes/restaurants');
 const platRoutes = require('./routes/plats');
-const errorHandler = require('./middleware/errorHandler');
 const commandeRoutes = require('./routes/commandes');
-
-// Charger .env seulement en développement local
-// En Docker, les variables sont injectées par docker-compose
-const path = require('path');
-const fs = require('fs');
-const envPath = path.resolve(__dirname, '../../env');
-if (fs.existsSync(envPath)) {
-    require('dotenv').config({ path: envPath });
-}
+const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // --- Middleware globaux ---
 app.use(cors());
@@ -41,7 +46,8 @@ app.use(morgan('dev'));
 app.get('/', (req, res) => {
   res.json({
     message: 'Bienvenue sur l\'API TerrangaFood 🍛',
-    version: '0.0.0',
+    version: '1.0.0',
+    status: 'Online',
     endpoints: {
       restaurants: '/api/restaurants',
       plats: '/api/plats',
@@ -58,13 +64,20 @@ app.use('/api/commandes', commandeRoutes);
 app.use(errorHandler);
 
 // --- Connexion MongoDB et démarrage ---
+// On vérifie que l'URI n'est pas undefined avant de tenter la connexion
+if (!MONGODB_URI) {
+    console.error('❌ Erreur : La variable MONGODB_URI est "undefined".');
+    console.error('Vérifiez que votre fichier .env est bien à la racine et contient l\'URI sur une seule ligne.');
+    process.exit(1);
+}
+
 mongoose
-  .connect(process.env.MONGODB_URI)
+  .connect(MONGODB_URI)
   .then(() => {
     console.log('✅ Connecté à MongoDB avec succès');
     app.listen(PORT, () => {
       console.log(`🚀 Serveur démarré sur le port ${PORT}`);
-      console.log(`📍 http://localhost:${PORT}`);
+      console.log(`📍 URL locale : http://localhost:${PORT}`);
     });
   })
   .catch((err) => {

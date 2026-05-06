@@ -1,4 +1,4 @@
-const Plat = require('../models/Plat');
+const Plat = require('../models/plat');
 
 // GET /api/plats — Récupérer tous les plats
 exports.getAll = async (req, res, next) => {
