@@ -1,0 +1,57 @@
+### TerrangaFood - Tests API Paiement Wave
+### Utilisez REST Client (VS Code) ou Postman pour tester
+
+@baseUrl = http://localhost:3001/api
+@commandeId = REMPLACER_PAR_ID_COMMANDE
+
+### 1. Créer une nouvelle commande
+POST {{baseUrl}}/commandes
+Content-Type: application/json
+
+{
+  "client": "Abdou Drame",
+  "telephone": "+221771234567",
+  "adresseLivraison": "Quartier Nord, Saint-Louis",
+  "restaurant": "REMPLACER_PAR_ID_RESTAURANT",
+  "plats": ["REMPLACER_PAR_ID_PLAT"],
+  "montantTotal": 15000,
+  "commentaire": "Test paiement Wave"
+}
+
+### 2. Lister toutes les commandes
+GET {{baseUrl}}/commandes
+
+### 3. Obtenir une commande spécifique
+GET {{baseUrl}}/commandes/{{commandeId}}
+
+### 4. Initier le paiement Wave
+POST {{baseUrl}}/commandes/{{commandeId}}/paiement/initier
+
+### 5. Vérifier le statut du paiement
+GET {{baseUrl}}/commandes/{{commandeId}}/paiement/verifier
+
+### 6. Obtenir le statut de paiement
+GET {{baseUrl}}/commandes/{{commandeId}}/paiement/statut
+
+### 7. Changer le statut de la commande (après paiement)
+PATCH {{baseUrl}}/commandes/{{commandeId}}/statut
+Content-Type: application/json
+
+{
+  "statut": "confirmée"
+}
+
+### 8. Simuler un webhook Wave (pour tests locaux)
+POST {{baseUrl}}/webhooks/wave
+Content-Type: application/json
+X-Wave-Signature: test_signature
+
+{
+  "id": "wvchk_test123456789",
+  "checkout_status": "complete",
+  "payment_status": "successful",
+  "client_reference": "{{commandeId}}",
+  "transaction_id": "txn_test123456789",
+  "amount": 15000,
+  "when_completed": "2024-05-25T10:30:00Z"
+}

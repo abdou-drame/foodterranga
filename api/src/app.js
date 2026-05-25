@@ -31,6 +31,8 @@ if (fs.existsSync(envPath)) {
 const restaurantRoutes = require('./routes/restaurants');
 const platRoutes = require('./routes/plats');
 const commandeRoutes = require('./routes/commandes');
+const paiementRoutes = require('./routes/paiements');
+const webhookRoutes = require('./routes/webhooks');
 const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
@@ -51,7 +53,9 @@ app.get('/', (req, res) => {
     endpoints: {
       restaurants: '/api/restaurants',
       plats: '/api/plats',
-      commandes: '/api/commandes'
+      commandes: '/api/commandes',
+      paiements: '/api/commandes/:id/paiement',
+      webhooks: '/api/webhooks/wave'
     }
   });
 });
@@ -59,6 +63,8 @@ app.get('/', (req, res) => {
 app.use('/api/restaurants', restaurantRoutes);
 app.use('/api/plats', platRoutes);
 app.use('/api/commandes', commandeRoutes);
+app.use('/api/commandes', paiementRoutes);
+app.use('/api/webhooks', webhookRoutes);
 
 // --- Gestion des erreurs ---
 app.use(errorHandler);

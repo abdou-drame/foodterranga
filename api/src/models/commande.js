@@ -37,13 +37,44 @@ const commandeSchema = new mongoose.Schema(
     },
     statut: {
       type: String,
-      enum: ['en attente', 'confirmée', 'en livraison', 'livrée', 'annulée'],
+      enum: ['en attente', 'en attente de paiement', 'payée', 'confirmée', 'en livraison', 'livrée', 'annulée'],
       default: 'en attente'
     },
     commentaire: {
       type: String,
       trim: true,
       maxlength: [300, 'Le commentaire ne peut pas dépasser 300 caractères']
+    },
+    paiement: {
+      methode: {
+        type: String,
+        enum: ['wave', 'especes', 'carte'],
+        default: 'especes'
+      },
+      statut: {
+        type: String,
+        enum: ['en attente', 'en cours', 'reussi', 'echoue', 'rembourse'],
+        default: 'en attente'
+      },
+      transactionId: {
+        type: String,
+        trim: true
+      },
+      wavePaymentId: {
+        type: String,
+        trim: true
+      },
+      waveCheckoutUrl: {
+        type: String,
+        trim: true
+      },
+      datePaiement: {
+        type: Date
+      },
+      montantPaye: {
+        type: Number,
+        min: 0
+      }
     }
   },
   {

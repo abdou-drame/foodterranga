@@ -89,4 +89,11 @@ Projet pédagogique — Usage académique uniquement.
 ## Fonctionnalités existantes
 - Affichage de la liste des restaurants
 - Page de détail d’un restaurant avec ses plats
-- API REST : endpoints /restaurants et /plats
+- Système de commandes complet
+- **Paiement en ligne via Wave** 💳
+- API REST : endpoints /restaurants, /plats, /commandes et /paiements
+- Webhooks pour notifications de paiement automatiques
+
+## Documentation supplémentaire
+
+- **[PAIEMENT_WAVE.md](./PAIEMENT_WAVE.md)** : Guide complet d’intégration Wave Payment

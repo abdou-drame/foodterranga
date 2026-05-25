@@ -2,7 +2,9 @@ const Commande = require('../models/commande');
 
 // Transitions de statut autorisées
 const transitionsAutorisees = {
-    'en attente': ['confirmée', 'annulée'],
+    'en attente': ['en attente de paiement', 'confirmée', 'annulée'],
+    'en attente de paiement': ['payée', 'annulée'],
+    'payée': ['confirmée', 'annulée'],
     'confirmée': ['en livraison', 'annulée'],
     'en livraison': ['livrée'],
     'livrée': [],
